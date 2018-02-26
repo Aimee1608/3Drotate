@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>汽车大全恭贺新禧，携手全国经销商给您拜年</title>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,shrink-to-fit=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="https://h5api.xingyuanauto.com/StatisticsData"></script>
+    <script>
+        //检测代码
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?fdf0d2736b81bcae38aee0a100352a30";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script>
+//        //页面提示二维码
+        if(navigator.userAgent.match(/(iPhone|iPod|Android|ios|SymbianOS)/i) == null){
+            // console.log(window.innerWidth);
+            window.location.href = "https://h5.xingyuanauto.com/201711-New/viewpc/?link="+window.location.href;
+        }
+    </script>
+    <script>
+        document.addEventListener("WeixinJSBridgeReady", function () {
+            audioAutoPlay('musicStar');
+        }, false);
+    </script>
+    <script>
+        "use strict";
+        (function(_window) {
+            var navigatorUserAgent = navigator.userAgent;
+            var iPhone = navigatorUserAgent.indexOf("iPhone");
+            if (iPhone > -1) {
+                var dpr = Number(window.devicePixelRatio),
+                        one_dpr = 1 / dpr
+            } else {
+                var dpr = 1,
+                        one_dpr = 1
+            }
+//            alert(dpr);
+            var writeText = "<meta name=\"viewport\" content=\"width=device-width,initial-scale=" + one_dpr + ",maximum-scale=" + one_dpr + ",minimum-scale=" + one_dpr + ",user-scalable=no\">\n        <meta name=\"'flexible\" content=\"initial-dpr=" + dpr + "\">";
+            document.write(writeText);
+            var html = document.getElementsByTagName("html");
+            var F0 = 75;
+            html[0].setAttribute("data-dpr", dpr);
+            var getFontSize = function getFontSize() {
+                var windowWidth = window.innerWidth;
+                html[0].style.fontSize = F0 * windowWidth / 750 + "px"
+            };
+            getFontSize();
+//            _window.addEventListener("resize", getFontSize, false)
+        })(window);
+
+    </script>
+    <style>
+        body {margin: 0;}
+        html, body, #CanvasBody {width: 100vw;height: 100vh;overflow: hidden;}
+        #CanvasBody {position: relative;}
+        #onDevice {position: absolute;bottom: 0;right: 0;z-index: 2;padding: 12px 18px;font-size: 20px;border: 1px solid #ddd;background-color: #fff;cursor: pointer;-webkit-appearance: none;}
+    </style>
+</head>
+<body>
+<!--横屏-->
+<div id="page-landscape" class="page-landscape">
+    <img src="img/phone.png" alt=""/>
+    <h3>为了更好的体验，请使用竖屏浏览</h3>
+</div>
+<!--竖屏-->
+<div id="page-portrait" class="page-portrait">
+    <!--预加载-->
+    <div class="load-page" id="loadingPage">
+        <div class="img-load-now">
+            <!--加载动画-->
+            <img src="img/LOGO.png" alt="" class="logo"/>
+            <img src="img/fubg.png" class="fubg"/>
+            <img src="img/fu.png" class="fu"/>
+            <img src="img/dog.png" class="dog"/>
+            <img src="img/dogtext.png" class="dogtext"/>
+            <p id="loadTxt">loading...0%</p >
+        </div>
+        <img src="img/btn.png" class="begin"/>
+    </div>
+
+    <!--正文-->
+    <div class="page-box" id="pageContainer">
+
+        <div id="CanvasBody">
+            <!--<input id="onDevice" type="button" value="开启陀螺仪">-->
+        </div>
+        <img src="img/xuan02.png" alt="" class="xuan"/>
+    </div>
+</div>
+<!--背景音乐-->
+<audio id="musicStar" src="source/bg04.mp3" preload="auto" loop="loop"></audio>
+<div class="btn-music">
+    <img src="img/music-open.png" class="open music" style="display: block;"/>
+    <img src="img/music-close.png" class="clock music" style="display: none;"/>
+</div>
+
+<script>
+    /*背景音乐,处理微信播放问题*/
+    var musicStar = document.getElementById('musicStar');
+    function audioAutoPlay(id){
+        var audio = document.getElementById(id);
+        var play = function(){
+            audio.play();
+//            audio.pause();
+            document.removeEventListener("touchstart",play, false);
+        };
+        audio.play();
+        audio.pause();
+
+        document.addEventListener("touchstart",play, false);
+    }
+</script>
+
+<!--分享代码-->
+<script type="text/javascript" src="https://h5php.xingyuanauto.com/weixin_serve/jssdk/js/wx_share.js"></script>
+<script>
+    $(function(){
+        //微信分享调用
+        var wxShare = new WxShare({ //微信自定义分享功能
+            title:'汽车大全恭贺新禧，携手全国经销商给您拜年', //分享标题
+            desc:'祝您新春快乐，开启幸福之路，一路旺到底',//分享描述
+            img:'img/share.jpg'//分享图片
+        });
+    })
+</script>
+
+<!--<script src="https://cdn.bootcss.com/three.js/r76/three.min.js"></script>-->
+<script src="js/three.min.js"></script>
+<script src="js/orienter.js"></script>
+<script src="js/tween.js"></script>
+<script src="https://cdn.bootcss.com/stats.js/r16/Stats.min.js"></script>
+<!-- 鼠标控制 （OrbitControls.js） -->
+<script src="js/OrbitControls.js"></script>
+<!-- 控制陀螺仪 （DeviceOrientationControls.js） -->
+<script src="js/DeviceOrientationControls.js"></script>
+<!-- 代码 -->
+<script>
+    var camera, scene, renderer,
+            isUserInteracting = false,
+            onMouseDownMouseX = 0, onMouseDownMouseY = 0,
+            lon = 0, onMouseDownLon = 0, onPointerDownLon= 0.0,
+            lat = 0, onMouseDownLat = 0, onPointerDownLat= 0.0,
+            phi = 0, theta = 0,
+            o = new Orienter(),
+            new_longitude=0,last_longitude=0,move_longitude=0,
+            new_latitude=0,last_latitude=0,
+            move_latitude=0,
+            is_touch=false,is_start=false,isPlay=true,isMusicPlay=true,tsa=100.1,ppl='';
+
+
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
+
+    var idx_Material=[],idx_Plane=[],idx_Mesh=[];	//首頁素材
+    var pp_Material=[],pp_Plane=[],pp_Mesh=[]; 		//人物
+    var pc_Material=[],pc_Plane=[],pc_Mesh=[]; 		//人物按鈕
+    var sc_Material=[],sc_Plane=[],sc_Mesh=[]; 		//風景其他
+
+    var sbTot=0,chkfinish=false,storySet,storyBtnSet,storyLoadSet,story_txt='';					//story
+    is_start=true;
+    //    init();
+    //     o.init();
+    //     animate();
+
+    function init() {/**初始化**/
+
+        var container, mesh;
+        container = document.getElementById( 'CanvasBody' );//容器
+        camera = new THREE.PerspectiveCamera( 49, window.innerWidth / window.innerHeight, 0.01, 1100 );//相机
+        camera.target = new THREE.Vector3( 0, 0, 0 );//相机位置
+
+        scene = new THREE.Scene();//舞台
+        scene.updateMatrixWorld(true);
+        var geometry = new THREE.CylinderGeometry(12, 12, 11, 72, 72, true);//圆柱体
+
+        geometry.scale( - 1, 1, 1 );
+
+        if(!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+            var imgUrl = "img/bg05.jpg"
+        }else{
+//
+            var imgUrl = "img/bg05small.jpg"
+        }
+//        alert(imgUrl);
+        var textureBg = new THREE.TextureLoader().load( imgUrl);
+        textureBg.generateMipmaps = true;
+        textureBg.magFilter = THREE.LinearFilter;
+        textureBg.minFilter = THREE.LinearFilter;
+        var material = new THREE.MeshBasicMaterial( {
+            map: textureBg,//圆柱体贴图，全景图
+//            color:0xFF0000,
+//            transparent: true
+        } );
+        mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
+
+
+
+
+        //  ::::::::::::::::::::::::人物 ::::::::::::::::::::::::
+        pp_Plane[1] = new THREE.PlaneGeometry(1, 1, 1, 1);
+        pp_Material[1] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p01.png' ),
+//             color: 0xFF0000,
+            opacity:0,
+            transparent: true
+        });
+        pp_Mesh[1] = new THREE.Mesh(pp_Plane[1], pp_Material[1]);
+        pp_Mesh[1].position.set(-2.1,0.3,9.2);
+        pp_Mesh[1].rotation.set(0,3,0);
+        pp_Mesh[1].callback = function() { goto_p(1); };
+        scene.add(pp_Mesh[1]);
+
+
+        pp_Plane[2] = new THREE.PlaneGeometry(1, 1, 1, 1);
+//        pp_Plane[2] = new THREE.PlaneGeometry(1, 1, 1, 1);
+        pp_Material[2] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p01.png' ),
+//             color: 0xFF0000,
+            opacity:0,
+            transparent: true
+        });
+        pp_Mesh[2] = new THREE.Mesh(pp_Plane[2], pp_Material[2]);
+        // pp_Mesh[2].position.set(-0.84,-0.31,1.01);
+        pp_Mesh[2].position.set(-7.5,0.3,8.5);
+        pp_Mesh[2].rotation.set(0,1.8,0);
+        pp_Mesh[2].callback = function() { goto_p(2); };
+        scene.add(pp_Mesh[2]);
+
+
+        // pp_Plane[3] = new THREE.PlaneGeometry(0.7, 0.35, 1, 1);
+        // pp_Plane[3] = new THREE.PlaneGeometry(0.72, 0.72, 1, 1);
+        pp_Plane[3] = new THREE.PlaneGeometry(1, 1, 1, 1);
+        pp_Material[3] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p03.png' ),
+//             color: 0xFF0000,
+            transparent: true,
+            opacity:0,
+        });
+        pp_Mesh[3] = new THREE.Mesh(pp_Plane[3], pp_Material[3]);
+        // pp_Mesh[3].position.set(-1.70,-0.08,1.18);
+        pp_Mesh[3].position.set(-8.3,0.3,3);
+        pp_Mesh[3].rotation.set(0,2.2,0);
+        pp_Mesh[3].callback = function() { goto_p(3); };
+        scene.add(pp_Mesh[3]);
+
+        pp_Plane[4] = new THREE.PlaneGeometry(1, 1, 1, 1);
+        pp_Material[4] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p04.png' ),
+//             color: 0xFF0000,
+            transparent: true,
+            opacity:0,
+        });
+        pp_Mesh[4] = new THREE.Mesh(pp_Plane[4], pp_Material[4]);
+        pp_Mesh[4].position.set(-9.5,0.3,-1.1);
+        pp_Mesh[4].rotation.set(0,1.8,0);
+        pp_Mesh[4].callback = function() { goto_p(4); };
+        scene.add(pp_Mesh[4]);
+
+
+        ////////////////////////////////////////////////////////////////
+        pp_Plane[5] = new THREE.PlaneGeometry(1,1, 1, 1);
+        pp_Material[5] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p05.png' ),
+//             color: 0xFF0000,
+            transparent: true,
+            opacity:0,
+        });
+        pp_Mesh[5] = new THREE.Mesh(pp_Plane[5], pp_Material[5]);
+        pp_Mesh[5].position.set(-8,0.3,-5.5);
+        pp_Mesh[5].rotation.set(0,1.5,0);
+        pp_Mesh[5].callback = function() { goto_p(5); };
+        scene.add(pp_Mesh[5]);
+
+        pp_Plane[6] = new THREE.PlaneGeometry(1, 1, 1, 1);
+        pp_Material[6] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p06.png' ),
+            transparent: true,
+            opacity:0
+//             color: 0xFF0000,
+
+        });
+
+        pp_Mesh[6] = new THREE.Mesh(pp_Plane[6], pp_Material[6]);
+        pp_Mesh[6].position.set(-4.6,0.3,-8.5);
+        pp_Mesh[6].rotation.set(0,1.4,0);
+        pp_Mesh[6].callback = function() { goto_p(6); };
+        scene.add(pp_Mesh[6]);
+
+        pp_Plane[7] = new THREE.PlaneGeometry(1, 1, 1, 1);
+        pp_Material[7] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p07.png' ),
+            transparent: true,
+//             color: 0xFF0000,
+            opacity:0,
+        });
+
+        pp_Mesh[7] = new THREE.Mesh(pp_Plane[7], pp_Material[7]);
+        pp_Mesh[7].position.set(4.5,0.3,-8.5);
+        pp_Mesh[7].rotation.set(0,-1.1,0);
+        pp_Mesh[7].callback = function() { goto_p(7); };
+        scene.add(pp_Mesh[7]);
+
+        pp_Plane[8] = new THREE.PlaneGeometry(1,1, 1, 1);
+        pp_Material[8] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p08.png' ),
+            transparent: true,
+//             color: 0xFF0000,
+            opacity:0,
+        });
+        pp_Mesh[8] = new THREE.Mesh(pp_Plane[8], pp_Material[8]);
+        pp_Mesh[8].position.set(7.1,0.3,-5.01);
+        pp_Mesh[8].rotation.set(0,-1.4,0);
+        pp_Mesh[8].callback = function() { goto_p(8); };
+        scene.add(pp_Mesh[8]);
+
+        pp_Plane[9] = new THREE.PlaneGeometry(0.9,0.9, 1, 1);
+        pp_Material[9] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p09.png' ),
+            transparent: true,
+//             color: 0xFF0000,
+            opacity:0,
+        });
+        pp_Mesh[9] = new THREE.Mesh(pp_Plane[9], pp_Material[9]);
+        pp_Mesh[9].position.set(7.38,0.3,-1.01);
+        pp_Mesh[9].rotation.set(0,-1.4,0);
+        pp_Mesh[9].callback = function() { goto_p(9); };
+        scene.add(pp_Mesh[9]);
+
+        pp_Plane[10] = new THREE.PlaneGeometry(0.6,0.6, 1, 1);
+        pp_Material[10] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p10.png' ),
+//             color: 0xFF0000,
+            opacity:0,
+            transparent: true
+        });
+        pp_Mesh[10] = new THREE.Mesh(pp_Plane[10], pp_Material[10]);
+        pp_Mesh[10].position.set(6.1,0.3,2.4);
+        pp_Mesh[10].rotation.set(0,-1.55,0);
+        pp_Mesh[10].callback = function() { goto_p(10); };
+        scene.add(pp_Mesh[10]);
+
+
+        pp_Plane[11] = new THREE.PlaneGeometry(0.85,0.85, 1, 1);
+        pp_Material[11] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p10.png' ),
+//            color: 0xFF0000,
+            transparent: true,
+            opacity:0,
+        });
+        pp_Mesh[11] = new THREE.Mesh(pp_Plane[11], pp_Material[11]);
+        pp_Mesh[11].position.set(4.7,0.1,5.2);
+        pp_Mesh[11].rotation.set(0,-1.55,0);
+        pp_Mesh[11].callback = function() { goto_p(11); };
+        scene.add(pp_Mesh[11]);
+
+        pp_Plane[12] = new THREE.PlaneGeometry(1,1, 1, 1);
+        pp_Material[12] = new THREE.MeshBasicMaterial({
+//            map: new THREE.TextureLoader().load( 'img/p10.png' ),
+//            color: 0xFF0000,
+            opacity:0,
+            transparent: true
+        });
+        pp_Mesh[12] = new THREE.Mesh(pp_Plane[12], pp_Material[12]);
+        pp_Mesh[12].position.set(2.4,0.3,9.2);
+        pp_Mesh[12].rotation.set(0,-3,0);
+        pp_Mesh[12].callback = function() { goto_p(12); };
+        scene.add(pp_Mesh[12]);
+
+        // 加入圓點動畫
+        pc_Plane[1] = new THREE.PlaneGeometry(1,0.25, 1, 1);
+        pc_Material[1] = new THREE.MeshBasicMaterial({
+            map: new THREE.TextureLoader().load( 'img/more.png' ),
+            //             color: 0xFF0000,
+            transparent: true
+//            opacity:0,
+
+        });
+        pc_Mesh[1] = new THREE.Mesh(pc_Plane[1], pc_Material[1]);
+        pc_Mesh[1].position.set(1,-2.6,-8.5);
+        pc_Mesh[1].rotation.set(0,0,0);
+        new TWEEN.Tween( pc_Mesh[1].scale ).to( { x:1.2,y:1.2 }, 800 ).repeat( Infinity ).delay( 200 ).yoyo( true ).easing( TWEEN.Easing.Cubic.InOut ).start();
+        pc_Mesh[1].callback = function() { goto_p(13); };
+        scene.add(pc_Mesh[1]);
+
+// 加入圓點動畫
+        pc_Plane[2] = new THREE.PlaneGeometry(2.7,5.94, 1, 1);
+        pc_Material[2] = new THREE.MeshBasicMaterial({
+            map: new THREE.TextureLoader().load( 'img/home.png' ),
+            //             color: 0xFF0000,
+            transparent: true
+//            opacity:0,
+
+        });
+        pc_Mesh[2] = new THREE.Mesh(pc_Plane[2], pc_Material[2]);
+        pc_Mesh[2].position.set(0,0.5,-8.5);
+        pc_Mesh[2].rotation.set(0,0,0);
+        scene.add(pc_Mesh[2]);
+
+        // 旋轉預設 攝影機看到的角度 Start//
+        // 其實是場景轉的角度
+        scene.rotation.set(0,11,0); //首頁
+
+
+        // 旋轉預設 攝影機看到的角度 End//
+
+
+        renderer = new THREE.WebGLRenderer({precision: 'highp' ,mipmap: 'highp',antialias:false});
+        renderer.setPixelRatio( window.devicePixelRatio );
+//        renderer.setPixelRatio( 6 );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+//        renderer.setSize( cas.width, cas.height );
+//        renderer.setSize( renderer.domElement.clientWidth, renderer.domElement.clientHeight );
+        container.appendChild( renderer.domElement );
+//        var cas = renderer.domElement;
+//        alert(cas+','+cas.width);
+//        console.log(cas,cas.width);
+//        renderer.setSize(cas.width,cas.height);
+
+
+        document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+        document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+        document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+        document.addEventListener( 'touchstart', onDocumentTouchDown, false );
+        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+        document.addEventListener( 'touchend', onDocumentTouchUp, false );
+        // document.addEventListener( 'wheel', onDocumentMouseWheel, false );
+        //
+        document.addEventListener( 'dragover', function ( event ) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+        }, false );
+        document.addEventListener( 'dragenter', function ( event ) {
+            document.body.style.opacity = 0.5;
+        }, false );
+        document.addEventListener( 'dragleave', function ( event ) {
+            document.body.style.opacity = 1;
+        }, false );
+        document.addEventListener( 'drop', function ( event ) {
+            event.preventDefault();
+            var reader = new FileReader();
+            reader.addEventListener( 'load', function ( event ) {
+                material.map.image.src = event.target.result;
+                material.map.needsUpdate = true;
+            }, false );
+            reader.readAsDataURL( event.dataTransfer.files[ 0 ] );
+            document.body.style.opacity = 1;
+        }, false );
+    }
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+    function onDocumentMouseDown( event ) {
+        event.preventDefault();
+        isUserInteracting = true;
+        onPointerDownPointerX = event.clientX;
+        onPointerDownPointerY = event.clientY;
+        onPointerDownLon = lon;
+        onPointerDownLat = lat;
+
+        // Click action
+        mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
+        raycaster.setFromCamera( mouse, camera );
+        var intersects = raycaster.intersectObjects( scene.children );
+//        console.log("点击的元素",intersects);
+        if ( intersects.length > 0 ) {//如果点到小圆点 就执行回调函数回调函数为goto_p
+            try {
+                intersects[0].object.callback();
+            }
+            catch(err) {}
+        }
+    }
+    function onDocumentMouseMove( event ) {
+        if ( isUserInteracting === true ) {
+            lon = ( onPointerDownPointerX - event.clientX ) * 0.1 + onPointerDownLon;
+            lat = ( event.clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
+        }
+    }
+    function onDocumentMouseUp( event ) {
+        isUserInteracting = false;
+    }
+
+    //  touch event start
+    function onDocumentTouchDown( event ) {
+        is_touch=true;
+
+        event.preventDefault();
+        isUserInteracting = true;
+        onPointerDownPointerX = event.touches[ 0 ].clientX;
+        onPointerDownPointerY = event.touches[ 0 ].clientY;
+        if(is_start){
+            onPointerDownLon = lon;
+            onPointerDownLat = lat;
+        }
+        // For Click action
+
+        mouse.x = ( onPointerDownPointerX / renderer.domElement.clientWidth ) * 2 - 1;
+        mouse.y = - ( onPointerDownPointerY / renderer.domElement.clientHeight ) * 2 + 1;
+
+        raycaster.setFromCamera( mouse, camera );
+        var intersects = raycaster.intersectObjects( scene.children );
+        if ( intersects.length > 0 ) {
+            try {
+                intersects[0].object.callback();
+            }
+            catch(err) {}
+        }
+    }
+    function onDocumentTouchMove( event ) {
+        if(is_start){
+            if ( isUserInteracting === true ) {
+                lon = ( onPointerDownPointerX - event.touches[ 0 ].clientX ) * 0.1 + onPointerDownLon;
+                lat = ( event.touches[ 0 ].clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
+            }
+        }
+    }
+    function onDocumentTouchUp( event ) {
+        is_touch=false;
+    }
+    //  touch event end
+
+    //  set
+    function onDocumentTouchDown2( event ) {
+        tsa = event.touches[0].clientY;
+        console.log( '@:'+event.touches[0].clientY );
+        event.preventDefault();
+
+    }
+    function onDocumentMouseWheel( event ) {
+        camera.fov += event.deltaY * 0.05;
+        camera.updateProjectionMatrix();
+    }
+    function animate() {
+
+        if(isPlay){
+            TWEEN.update();
+            update();
+            requestAnimationFrame( animate );
+        }
+
+    }
+    o.onOrient = function (obj) {
+        if(is_start){
+            new_longitude = obj.lon;
+            move_longitude=new_longitude-last_longitude;
+
+            if(move_longitude>=300){
+                move_longitude=move_longitude-361;
+            }else if(move_longitude<=-300){
+                move_longitude=move_longitude+359;
+            }
+            if( is_touch ){
+                move_longitude=0;
+            }else{
+                move_longitude=move_longitude*0.6;
+            }
+
+            lon=lon-move_longitude;
+            last_longitude = obj.lon;
+        }
+        // var is_touch_txt='';
+        // if(is_touch){ is_touch_txt='ture'; }else{ is_touch_txt='false'; }
+    };
+
+    function update() {
+
+//        if(loading_finished){
+        lat = Math.max( -6, Math.min( 6, lat ) );
+        phi = THREE.Math.degToRad( 90 - lat );
+        theta = THREE.Math.degToRad( lon );
+
+        camera.target.x =  500 * Math.sin( phi ) * Math.cos( theta );
+        camera.target.y = 0;
+        camera.target.z =  500 * Math.sin( phi ) * Math.sin( theta ) ;
+        camera.lookAt( camera.target );
+
+//        }
+        renderer.render( scene, camera );
+    }
+    //从左到右的顺序
+    var urlList = [
+        "http://vm.auto.gmw.cn/jingxiaoshang/8295.html",//北方长福
+        "http://vm.auto.gmw.cn/jingxiaoshang/8250.html",//康正
+        "http://vm.auto.gmw.cn/jingxiaoshang/8327.html",//淮北永奥
+        "http://vm.auto.gmw.cn/jingxiaoshang/8429.html",//广汽传祺福州 、、、同和日产
+        "http://vm.auto.gmw.cn/jingxiaoshang/8524.html",//大昌行茂名、、。。。重庆德佳林林肯中心
+        "http://vm.auto.gmw.cn/jingxiaoshang/8479.html",//伯骐一汽丰田 、、、、、、、万兴
+        "http://vm.auto.gmw.cn/jingxiaoshang/8257.html",//山西新佳广本
+        "http://vm.auto.gmw.cn/jingxiaoshang/8372.html",//武汉友芝友传祺店 、、、、、广汽本田深圳南山店-----
+        "http://vm.auto.gmw.cn/jingxiaoshang/8279.html",//哈尔滨龙晟丰田
+        "http://vm.auto.gmw.cn/jingxiaoshang/8356.html",//呼市利丰一汽、、、、、湖州五菱
+        "http://vm.auto.gmw.cn/jingxiaoshang/8430.html",//东莞东锐长安汽车、、、、广州物通鸿骏
+        "http://vm.auto.gmw.cn/jingxiaoshang/8475.html",//郑州超达哈弗、、、、、、陕西唐都兴辰
+        "http://vm.auto.gmw.cn/list?type=7&dataType=2"//最后一个
+    ];
+    function goto_p(index){
+        console.log('点击',index);
+        window.location.href=urlList[index-1];
+
+    }
+</script>
+<script src="js/style.js"></script>
+</body>
+</html>
