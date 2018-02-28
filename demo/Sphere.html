@@ -48,7 +48,7 @@
 <!--重力感应-->
 <script src="js/orienter.js"></script>
 <!--动画效果-->
-<script src="js/tween.js"></script>
+<!--<script src="js/tween.js"></script>-->
 <!-- 代码 -->
 <script>
     var camera, scene, renderer,
@@ -94,7 +94,7 @@
             //transparent: true
         } );
         mesh = new THREE.Mesh( geometry, material );
-        new TWEEN.Tween( mesh).to( {transform:"rotate(90deg)"}, 800 ).repeat( false ).delay( 300 ).yoyo( true ).easing( TWEEN.Easing.Cubic.InOut ).start();
+//        new TWEEN.Tween( mesh).to( {transform:"rotate(90deg)"}, 800 ).repeat( false ).delay( 300 ).yoyo( true ).easing( TWEEN.Easing.Cubic.InOut ).start();
         scene.add( mesh );
 
         // 旋转预设 摄影机看到的角度 Start//
