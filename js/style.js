@@ -151,8 +151,6 @@ function portrait(){
             "img/dogtext.png",
             "img/fu.png",
             "img/fubg.png",
-            "img/bg03.jpg",
-            "img/bg03small.jpg",
             "img/xuan02.png",
             "img/home.png",
             "img/LOGO.png",
