@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>圆柱体</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,shrink-to-fit=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="msapplication-tap-highlight" content="no">
+    <script>
+        "use strict";
+        (function(_window) {
+            var navigatorUserAgent = navigator.userAgent;
+            var iPhone = navigatorUserAgent.indexOf("iPhone");
+            if (iPhone > -1) {
+                var dpr = Number(window.devicePixelRatio),
+                        one_dpr = 1 / dpr
+            } else {
+                var dpr = 1,
+                        one_dpr = 1
+            }
+//            alert(dpr);
+            var writeText = "<meta name=\"viewport\" content=\"width=device-width,initial-scale=" + one_dpr + ",maximum-scale=" + one_dpr + ",minimum-scale=" + one_dpr + ",user-scalable=no\">\n        <meta name=\"'flexible\" content=\"initial-dpr=" + dpr + "\">";
+            document.write(writeText);
+            var html = document.getElementsByTagName("html");
+            var F0 = 75;
+            html[0].setAttribute("data-dpr", dpr);
+            var getFontSize = function getFontSize() {
+                var windowWidth = window.innerWidth;
+                html[0].style.fontSize = F0 * windowWidth / 750 + "px"
+            };
+            getFontSize();
+//            _window.addEventListener("resize", getFontSize, false)
+        })(window);
+
+    </script>
+    <style>
+        body {margin: 0;}
+        html, body, #CanvasBody {width: 100vw;height: 100vh;overflow: hidden;}
+        #CanvasBody {position: relative;}
+    </style>
+</head>
+<body>
+<div id="CanvasBody"></div>
+<script src="js/three.min.js"></script>
+<!--重力感应-->
+<script src="js/orienter.js"></script>
+<!--动画效果-->
+<script src="js/tween.js"></script>
+<!-- 代码 -->
+<script>
+    var camera, scene, renderer,
+            isUserInteracting = false,
+            onMouseDownMouseX = 0, onMouseDownMouseY = 0,
+            lon = 0, onMouseDownLon = 0, onPointerDownLon= 0.0,onPointerDownPointerX = 0,
+            lat = 0, onMouseDownLat = 0, onPointerDownLat= 0.0,onPointerDownPointerY = 0,
+            phi = 0, theta = 0,
+            o = new Orienter(),
+            new_longitude=0,last_longitude=0,move_longitude=0,
+            new_latitude=0,last_latitude=0,
+            move_latitude=0,
+            is_touch=false,is_start=false,isPlay=true,isMusicPlay=true,tsa=100.1,ppl='';
+
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
+
+    var idx_Material=[],idx_Plane=[],idx_Mesh=[];	//首頁素材
+    var pp_Material=[],pp_Plane=[],pp_Mesh=[]; 		//人物
+    var pc_Material=[],pc_Plane=[],pc_Mesh=[]; 		//人物按鈕
+    var sc_Material=[],sc_Plane=[],sc_Mesh=[]; 		//風景其他
+
+    var sbTot=0,chkfinish=false,storySet,storyBtnSet,storyLoadSet,story_txt='';					//story
+    is_start=true;
+    init();
+    o.init();
+    animate();
+
+    function init() {/**初始化**/
+    var container, mesh;
+        container = document.getElementById( 'CanvasBody' );//容器
+        camera = new THREE.PerspectiveCamera( 49, window.innerWidth / window.innerHeight, 0.01, 1100 );//相机
+        camera.target = new THREE.Vector3( 0, 0, 0 );//相机位置
+
+        scene = new THREE.Scene();//舞台
+        scene.updateMatrixWorld(true);
+        var geometry = new THREE.CylinderGeometry(12, 12, 11, 72, 72, false);//圆柱体
+
+        geometry.scale( - 1, 1, 1 );
+
+        if(!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+            var imgUrl = "img/bg05.jpg"
+        }else{
+            var imgUrl = "img/bg05small.jpg"
+        }
+        var textureBg = new THREE.TextureLoader().load( imgUrl);
+        textureBg.generateMipmaps = true;
+        textureBg.magFilter = THREE.LinearFilter;
+        textureBg.minFilter = THREE.LinearFilter;
+        var matArray= [];
+        matArray.push(new THREE.MeshBasicMaterial({map: textureBg}));
+        matArray.push(new THREE.MeshBasicMaterial({color:0xff0000,transparent: true}));
+        matArray.push(new THREE.MeshBasicMaterial({color:0xff0000,transparent: true}));
+
+        var material = new THREE.MeshFaceMaterial( matArray );
+
+        mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
+
+       var homePlane = new THREE.PlaneGeometry(2.7,5.94, 1, 1);
+        var homeMaterial = new THREE.MeshBasicMaterial({
+            map: new THREE.TextureLoader().load( 'img/home.png' ),
+            //             color: 0xFF0000,
+            transparent: true
+//            opacity:0,
+
+        });
+        pc_Mesh[2] = new THREE.Mesh(homePlane, homeMaterial);
+        pc_Mesh[2].position.set(0,0.5,-8.5);
+        pc_Mesh[2].rotation.set(0,0,0);
+        scene.add(pc_Mesh[2]);
+
+        // 旋转预设 摄影机看到的角度 Start//
+        scene.rotation.set(0,11,0); //首頁
+
+        //初始化渲染器，追加到容器
+        renderer = new THREE.WebGLRenderer({precision: 'highp' ,mipmap: 'highp',antialias:false});
+        renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        container.appendChild( renderer.domElement );
+
+
+        document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+        document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+        document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+        document.addEventListener( 'touchstart', onDocumentTouchDown, false );
+        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+        document.addEventListener( 'touchend', onDocumentTouchUp, false );
+        // document.addEventListener( 'wheel', onDocumentMouseWheel, false );
+        //
+        document.addEventListener( 'dragover', function ( event ) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+        }, false );
+        document.addEventListener( 'dragenter', function ( event ) {
+            document.body.style.opacity = 0.5;
+        }, false );
+        document.addEventListener( 'dragleave', function ( event ) {
+            document.body.style.opacity = 1;
+        }, false );
+        document.addEventListener( 'drop', function ( event ) {
+            event.preventDefault();
+            var reader = new FileReader();
+            reader.addEventListener( 'load', function ( event ) {
+                material.map.image.src = event.target.result;
+                material.map.needsUpdate = true;
+            }, false );
+            reader.readAsDataURL( event.dataTransfer.files[ 0 ] );
+            document.body.style.opacity = 1;
+        }, false );
+    }
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+    function onDocumentMouseDown( event ) {
+        event.preventDefault();
+        isUserInteracting = true;
+        onPointerDownPointerX = event.clientX;
+        onPointerDownPointerY = event.clientY;
+        onPointerDownLon = lon;
+        onPointerDownLat = lat;
+
+        // Click action
+        mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
+        raycaster.setFromCamera( mouse, camera );
+        var intersects = raycaster.intersectObjects( scene.children );
+        console.log("点击的元素",intersects);
+        if ( intersects.length > 0 ) {//如果点到小圆点 就执行回调函数回调函数为goto_p
+            try {
+                intersects[0].object.callback();
+            }
+            catch(err) {}
+        }
+    }
+    function onDocumentMouseMove( event ) {
+        if ( isUserInteracting === true ) {
+            lon = ( onPointerDownPointerX - event.clientX ) * 0.1 + onPointerDownLon;
+            lat = ( event.clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
+        }
+    }
+    function onDocumentMouseUp( event ) {
+        isUserInteracting = false;
+    }
+
+    //  touch event start
+    function onDocumentTouchDown( event ) {
+        is_touch=true;
+
+        event.preventDefault();
+        isUserInteracting = true;
+        onPointerDownPointerX = event.touches[ 0 ].clientX;
+        onPointerDownPointerY = event.touches[ 0 ].clientY;
+        if(is_start){
+            onPointerDownLon = lon;
+            onPointerDownLat = lat;
+        }
+        // For Click action
+
+        mouse.x = ( onPointerDownPointerX / renderer.domElement.clientWidth ) * 2 - 1;
+        mouse.y = - ( onPointerDownPointerY / renderer.domElement.clientHeight ) * 2 + 1;
+
+        raycaster.setFromCamera( mouse, camera );
+        var intersects = raycaster.intersectObjects( scene.children );
+        console.log('touchDown',lon,lat);
+        if ( intersects.length > 0 ) {
+            try {
+                intersects[0].object.callback();
+            }
+            catch(err) {}
+        }
+    }
+    function onDocumentTouchMove( event ) {
+        if(is_start){
+            if ( isUserInteracting === true ) {
+
+                lon = ( onPointerDownPointerX - event.touches[ 0 ].clientX ) * 0.1 + onPointerDownLon;
+                lat = ( event.touches[ 0 ].clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
+            }
+        }
+    }
+    function onDocumentTouchUp( event ) {
+        is_touch=false;
+    }
+    //  touch event end
+
+    //  set
+    function onDocumentTouchDown2( event ) {
+        tsa = event.touches[0].clientY;
+        console.log( '@:'+event.touches[0].clientY );
+        event.preventDefault();
+
+    }
+    function onDocumentMouseWheel( event ) {
+        camera.fov += event.deltaY * 0.05;
+        camera.updateProjectionMatrix();
+    }
+    function animate() {//播放动画
+        if(isPlay){
+            TWEEN.update();
+            update();
+            requestAnimationFrame( animate );
+        }
+
+    }
+    o.onOrient = function (obj) {//重力感应计算角度
+        if(is_start){
+            //最新经度
+            new_longitude = obj.lon;
+            move_longitude=new_longitude-last_longitude;
+
+            //最新纬度
+            new_latitude = obj.lat;
+            move_latitude = new_latitude-last_latitude;
+
+            //判断经纬度
+            if(move_longitude>=300){
+                move_longitude=move_longitude-361;
+            }else if(move_longitude<=-300){
+                move_longitude=move_longitude+359;
+            }
+
+
+            if(move_latitude>=300){
+                move_latitude=move_latitude-361;
+            }else if(move_latitude<=-300){
+                move_latitude=move_latitude+359;
+            }
+
+            if( is_touch ){
+                move_longitude=0;
+                move_latitude=0;
+            }else{
+                move_longitude=move_longitude*0.6;
+                move_latitude=move_latitude*0.6;
+            }
+            //计算得出重力感应的经纬度
+            lon=lon-move_longitude;
+            last_longitude = obj.lon;
+            lat = lat-move_latitude;
+            last_latitude = obj.lat;
+        }
+
+    };
+
+    function update() {//更新摄像机位置，旋转平移
+        lat = Math.max( -6, Math.min( 6, lat ) );//设置lat纬度的范围，只在一个范围内旋转
+        phi = THREE.Math.degToRad( 90 - lat );
+        theta = THREE.Math.degToRad( lon );
+        camera.target.x =  500 * Math.sin( phi ) * Math.cos( theta );//X轴的坐标
+        camera.target.y = 0;//y轴的坐标,如果为0的时候 垂直方向没有重力感应及移动效果
+        camera.target.z =  500 * Math.sin( phi ) * Math.sin( theta ) ;//z轴的坐标
+        camera.lookAt( camera.target );
+        renderer.render( scene, camera );//重新渲染
+    }
+
+</script>
+</body>
+</html>

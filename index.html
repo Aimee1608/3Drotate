@@ -35,32 +35,32 @@
         }, false);
     </script>
     <script>
-        "use strict";
-        (function(_window) {
-            var navigatorUserAgent = navigator.userAgent;
-            var iPhone = navigatorUserAgent.indexOf("iPhone");
-            if (iPhone > -1) {
-                var dpr = Number(window.devicePixelRatio),
-                        one_dpr = 1 / dpr
-            } else {
-                var dpr = 1,
-                        one_dpr = 1
-            }
+    "use strict";
+    (function(_window) {
+        var navigatorUserAgent = navigator.userAgent;
+        var iPhone = navigatorUserAgent.indexOf("iPhone");
+        if (iPhone > -1) {
+            var dpr = Number(window.devicePixelRatio),
+                    one_dpr = 1 / dpr
+        } else {
+            var dpr = 1,
+                    one_dpr = 1
+        }
 //            alert(dpr);
-            var writeText = "<meta name=\"viewport\" content=\"width=device-width,initial-scale=" + one_dpr + ",maximum-scale=" + one_dpr + ",minimum-scale=" + one_dpr + ",user-scalable=no\">\n        <meta name=\"'flexible\" content=\"initial-dpr=" + dpr + "\">";
-            document.write(writeText);
-            var html = document.getElementsByTagName("html");
-            var F0 = 75;
-            html[0].setAttribute("data-dpr", dpr);
-            var getFontSize = function getFontSize() {
-                var windowWidth = window.innerWidth;
-                html[0].style.fontSize = F0 * windowWidth / 750 + "px"
-            };
-            getFontSize();
+        var writeText = "<meta name=\"viewport\" content=\"width=device-width,initial-scale=" + one_dpr + ",maximum-scale=" + one_dpr + ",minimum-scale=" + one_dpr + ",user-scalable=no\">\n        <meta name=\"'flexible\" content=\"initial-dpr=" + dpr + "\">";
+        document.write(writeText);
+        var html = document.getElementsByTagName("html");
+        var F0 = 75;
+        html[0].setAttribute("data-dpr", dpr);
+        var getFontSize = function getFontSize() {
+            var windowWidth = window.innerWidth;
+            html[0].style.fontSize = F0 * windowWidth / 750 + "px"
+        };
+        getFontSize();
 //            _window.addEventListener("resize", getFontSize, false)
-        })(window);
+    })(window);
 
-    </script>
+</script>
     <style>
         body {margin: 0;}
         html, body, #CanvasBody {width: 100vw;height: 100vh;overflow: hidden;}
@@ -142,7 +142,7 @@
 <script src="js/tween.js"></script>
 <script src="https://cdn.bootcss.com/stats.js/r16/Stats.min.js"></script>
 <!-- 鼠标控制 （OrbitControls.js） -->
-<script src="js/OrbitControls.js"></script>
+<!--<script src="js/OrbitControls.js"></script>-->
 <!-- 控制陀螺仪 （DeviceOrientationControls.js） -->
 <script src="js/DeviceOrientationControls.js"></script>
 <!-- 代码 -->
@@ -183,7 +183,7 @@
 
         scene = new THREE.Scene();//舞台
         scene.updateMatrixWorld(true);
-        var geometry = new THREE.CylinderGeometry(12, 12, 11, 72, 72, true);//圆柱体
+        var geometry = new THREE.CylinderGeometry(12, 12, 11, 72, 72, false);//圆柱体
 
         geometry.scale( - 1, 1, 1 );
 
@@ -198,11 +198,22 @@
         textureBg.generateMipmaps = true;
         textureBg.magFilter = THREE.LinearFilter;
         textureBg.minFilter = THREE.LinearFilter;
-        var material = new THREE.MeshBasicMaterial( {
-            map: textureBg,//圆柱体贴图，全景图
-//            color:0xFF0000,
-//            transparent: true
-        } );
+//        var material = new THREE.MeshBasicMaterial( {
+//            map: textureBg,//圆柱体贴图，全景图
+////            color:0xFF0000,
+////            transparent: true
+//        } );
+        var matArray= [
+
+        ];
+        matArray.push(new THREE.MeshBasicMaterial({map: textureBg}));
+//        matArray.push(new THREE.MeshBasicMaterial({map: textureBg}));
+//        matArray.push(new THREE.MeshBasicMaterial({map: textureBg}));
+        matArray.push(new THREE.MeshBasicMaterial({color:0xff0000,transparent: true}));
+        matArray.push(new THREE.MeshBasicMaterial({color:0xff0000,transparent: true}));
+
+        var material = new THREE.MeshFaceMaterial( matArray );
+
         mesh = new THREE.Mesh( geometry, material );
         scene.add( mesh );
 
@@ -478,7 +489,7 @@
         mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
         raycaster.setFromCamera( mouse, camera );
         var intersects = raycaster.intersectObjects( scene.children );
-//        console.log("点击的元素",intersects);
+        console.log("点击的元素",intersects);
         if ( intersects.length > 0 ) {//如果点到小圆点 就执行回调函数回调函数为goto_p
             try {
                 intersects[0].object.callback();
@@ -515,6 +526,7 @@
 
         raycaster.setFromCamera( mouse, camera );
         var intersects = raycaster.intersectObjects( scene.children );
+        console.log('touchDown',lon,lat);
         if ( intersects.length > 0 ) {
             try {
                 intersects[0].object.callback();
@@ -525,8 +537,10 @@
     function onDocumentTouchMove( event ) {
         if(is_start){
             if ( isUserInteracting === true ) {
+
                 lon = ( onPointerDownPointerX - event.touches[ 0 ].clientX ) * 0.1 + onPointerDownLon;
                 lat = ( event.touches[ 0 ].clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
+//                console.log('touch',lon,lat);
             }
         }
     }
@@ -547,7 +561,6 @@
         camera.updateProjectionMatrix();
     }
     function animate() {
-
         if(isPlay){
             TWEEN.update();
             update();
@@ -557,22 +570,44 @@
     }
     o.onOrient = function (obj) {
         if(is_start){
+//            console.log('重力',obj);
             new_longitude = obj.lon;
             move_longitude=new_longitude-last_longitude;
+
+            //buc
+            new_latitude = obj.lat;
+            move_latitude = new_latitude-last_latitude;
 
             if(move_longitude>=300){
                 move_longitude=move_longitude-361;
             }else if(move_longitude<=-300){
                 move_longitude=move_longitude+359;
             }
+
+            //buchong
+            if(move_latitude>=300){
+                move_latitude=move_latitude-361;
+            }else if(move_latitude<=-300){
+                move_latitude=move_latitude+359;
+            }
+
             if( is_touch ){
                 move_longitude=0;
             }else{
                 move_longitude=move_longitude*0.6;
             }
 
+            if( is_touch ){
+                move_latitude=0;
+            }else{
+                move_latitude=move_latitude*0.6;
+            }
+
             lon=lon-move_longitude;
             last_longitude = obj.lon;
+
+            lat = lat-move_latitude;
+            last_latitude = obj.lat;
         }
         // var is_touch_txt='';
         // if(is_touch){ is_touch_txt='ture'; }else{ is_touch_txt='false'; }
@@ -581,12 +616,15 @@
     function update() {
 
 //        if(loading_finished){
-        lat = Math.max( -6, Math.min( 6, lat ) );
+//        lon = Math.max(-180, Math.min(180, lon));//限制固定角度内旋转
+//        lon+=0.1;
+        lat = Math.max( -6, Math.min( 6, lat ) );///6
+//        lat = lat;
         phi = THREE.Math.degToRad( 90 - lat );
         theta = THREE.Math.degToRad( lon );
-
+//        console.log('update',lat);
         camera.target.x =  500 * Math.sin( phi ) * Math.cos( theta );
-        camera.target.y = 0;
+        camera.target.y = 0 ;
         camera.target.z =  500 * Math.sin( phi ) * Math.sin( theta ) ;
         camera.lookAt( camera.target );
 
