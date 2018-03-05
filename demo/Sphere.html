@@ -51,29 +51,29 @@
 <script src="js/tween.js"></script>
 <!-- 代码 -->
 <script>
-    var camera, scene, renderer,
-            isUserInteracting = false,
-            onMouseDownMouseX = 0, onMouseDownMouseY = 0,
-            lon = 0, onMouseDownLon = 0, onPointerDownLon= 0.0,onPointerDownPointerX = 0,
-            lat = 0, onMouseDownLat = 0, onPointerDownLat= 0.0,onPointerDownPointerY = 0,
-            phi = 0, theta = 0,
-            o = new Orienter(),
-            new_longitude=0,last_longitude=0,move_longitude=0,
-            new_latitude=0,last_latitude=0,
-            move_latitude=0,
+    var camera,//摄像机
+            scene,//舞台
+            renderer,//渲染器
+            isUserInteracting = false,//用户是否正在操作
+            onMouseDownMouseX = 0, onMouseDownMouseY = 0,//鼠标点击的x和Y坐标
+            lon = 0, onMouseDownLon = 0, onPointerDownLon= 0.0,onPointerDownPointerX = 0,//经度
+            lat = 0, onMouseDownLat = 0, onPointerDownLat= 0.0,onPointerDownPointerY = 0,//纬度
+            phi = 0, theta = 0,//计算相机位置的重要参数
+            o = new Orienter(),//陀螺仪方法对象
+            new_longitude=0,last_longitude=0,move_longitude=0,//改变的经度的计算
+            new_latitude=0,last_latitude=0,move_latitude=0,//改变的纬度的计算
             is_touch=false,is_start=false,isPlay=true,isMusicPlay=true,tsa=100.1,ppl='';
 
-    var raycaster = new THREE.Raycaster();
-    var mouse = new THREE.Vector2();
-
-    var sbTot=0,chkfinish=false,storySet,storyBtnSet,storyLoadSet,story_txt='';					//story
+    var raycaster = new THREE.Raycaster();//拾取场景里面的物体,可判断点击或交互事件对应的元素
+    var mouse = new THREE.Vector2();//二维向量的对象，鼠标计算
+    //执行所有
     is_start=true;
     init();
     o.init();
     animate();
 
     function init() {/**初始化**/
-    var container, mesh;
+        var container, mesh;//容器和素材
         container = document.getElementById( 'CanvasBody' );//容器
         camera = new THREE.PerspectiveCamera( 72, window.innerWidth / window.innerHeight, 0.01, 1100 );//相机
         camera.target = new THREE.Vector3( 0, 0, 0 );//相机位置
@@ -83,10 +83,10 @@
         var geometry = new THREE.SphereGeometry(1, 32, 16);//球体
 
         geometry.scale( 1, 1, -1 );
-
+        //设置球体的背景贴图
         var textureBg = new THREE.TextureLoader().load("img/bg.jpg");
         textureBg.generateMipmaps = true;
-        textureBg.magFilter = THREE.LinearFilter;
+        textureBg.magFilter = THREE.LinearFilter;//设置贴纸素材的质量
         textureBg.minFilter = THREE.LinearFilter;
         var material = new THREE.MeshBasicMaterial( {
             map: textureBg,//圆柱体贴图，全景图
@@ -94,6 +94,7 @@
             //transparent: true
         } );
         mesh = new THREE.Mesh( geometry, material );
+        //这里可以设置对应的动画效果
 //        new TWEEN.Tween( mesh).to( {transform:"rotate(90deg)"}, 800 ).repeat( false ).delay( 300 ).yoyo( true ).easing( TWEEN.Easing.Cubic.InOut ).start();
         scene.add( mesh );
 
@@ -101,12 +102,12 @@
         scene.rotation.set(0,0,0); //首頁
 
         //初始化渲染器，追加到容器
-        renderer = new THREE.WebGLRenderer({precision: 'highp' ,mipmap: 'highp',antialias:false});
-        renderer.setPixelRatio( window.devicePixelRatio );
-        renderer.setSize( window.innerWidth, window.innerHeight );
-        container.appendChild( renderer.domElement );
+        renderer = new THREE.WebGLRenderer({precision: 'highp' ,mipmap: 'highp',antialias:false});//加上precision 和 mipmap参数，调整画面清晰度
+        renderer.setPixelRatio( window.devicePixelRatio );//设置像素比
+        renderer.setSize( window.innerWidth, window.innerHeight );//设置渲染窗口的大小
+        container.appendChild( renderer.domElement );//追加到容器中去
 
-
+        //鼠标、手机touch的各个事件
         document.addEventListener( 'mousedown', onDocumentMouseDown, false );
         document.addEventListener( 'mousemove', onDocumentMouseMove, false );
         document.addEventListener( 'mouseup', onDocumentMouseUp, false );
@@ -137,6 +138,7 @@
             document.body.style.opacity = 1;
         }, false );
     }
+    //监听横竖屏重新设置尺寸
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
@@ -154,7 +156,7 @@
         mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
         mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
         raycaster.setFromCamera( mouse, camera );
-        var intersects = raycaster.intersectObjects( scene.children );
+        var intersects = raycaster.intersectObjects( scene.children );//第一个是最上面一层的元素
         console.log("点击的元素",intersects);
         if ( intersects.length > 0 ) {//如果点到小圆点 就执行回调函数回调函数为goto_p
             try {
